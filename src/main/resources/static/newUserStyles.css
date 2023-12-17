@@ -1,0 +1,120 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+*{
+
+    font-family: "Poppins", sans-serif;
+}
+body{
+    color: wheat;
+    background-color: #ece7dc;
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 20px;
+    background: white;
+
+}
+.logo{
+    display: flex;
+    align-items: center;
+}
+.logo a{
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 2rem 8rem 2rem 2rem;
+}
+
+.main
+{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 420px 420px ;
+    position: absolute;
+    top: 12%;
+    left: 10%;
+    height: 70%;
+    width: 80%;
+    background-color: whitesmoke;
+    border-radius:1%;
+    border-color: #000;
+    border-style: solid;
+}
+.personals
+{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.additional
+{
+    color: #000;
+    font-size: 20px;
+    max-width: 30%;
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.basicInfo
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-row: span 1;
+    grid-column: span 1;
+    color: #000;
+    padding: 20px;
+
+}
+
+.comment textarea
+{
+    width: max-content;
+    height: 300px;
+    overflow: auto;
+    resize: none;
+}
+
+.save
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: span 1;
+    grid-column: span 1;
+
+}
+.send
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: span 1;
+    grid-column: span 1;
+}
+
+.save button
+{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: wheat;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.send button
+{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: rgb(195, 178, 153);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,0 +1,142 @@
+<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Admin Dashboard | By Code Info</title>
+      <link rel="stylesheet" href="createTaskStyles.css" />
+      <!-- Font Awesome Cdn Link -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    </head>
+    <body>
+      <header class="header">
+        <div class="logo">
+          <a href="#">FloVVork</a>
+        </div>
+    
+        <div class="header-icons">
+          <div class="account">
+            <img src="./pic/img.jpg" alt="">
+            <h4><span th:text="${user.getUsername()}"></span></h4>
+          </div>
+        </div>
+      </header>
+      <div class="container">
+        <nav>
+          <div class="side_navbar">
+            <span>Main Menu</span>
+            <a href="/">Dashboard</a>
+            <a href="#">Profile</a>
+            <a href="#">My tasks</a>
+            <a href="createTask" class="active">Create Task</a>
+            <a href="#" style="color: red;">Logout</a>
+
+          </div>
+        </nav>
+    
+        <div class="main-body">
+          <h2>Create Task</h2>
+          
+    
+          <div class="history_lists">
+            <div class="list1">
+              <div class="row">
+                <h4>Recent documents</h4>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Dates</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Ammount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 <tr th:each="document : ${historyDocuments}">
+                   <td>#</td>
+                   <td th:text="${document.getTitle()}"></td>
+                   <td th:text="${document.getDocumentName()}"></td>
+                   <td th:text="${document.previousUser.getUsername()}"></td>
+                   <td th:text="${document.getExpireDate()}"></td>
+                 </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="history_lists">
+            <div class="list1">
+              <div class="row">
+                <h4>Available documents</h4>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                 <tr th:each="task : ${availableTasks}">
+                   <td th:text="${task.getTaskAccessID()}"></td>
+                   <td th:text="${task.getTask().getTaskName()}"></td>
+                   <td>cokolwiek poki co</td>
+                   <td><a th:href="${task.getTask().getTaskStartFile()}">START</a></td>
+                 </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div class="sidebar">
+          <h4>Messages</h4>
+          
+          <div class="balance">
+            <i class="fas fa-dollar icon"></i>
+            <div class="info">
+              <h5>Dollar</h5>
+              <span><i class="fas fa-dollar"></i>25,000.00</span>
+            </div>
+          </div>
+          
+          <div class="balance">
+            <i class="fa-solid fa-rupee-sign icon"></i>
+            <div class="info">
+              <h5>PKR</h5>
+              <span><i class="fa-solid fa-rupee-sign"></i>300,000.00</span>
+            </div>
+          </div>
+    
+          <div class="balance">
+            <i class="fas fa-euro icon"></i>
+            <div class="info">
+              <h5>Euro</h5>
+              <span><i class="fas fa-euro"></i>25,000.00</span>
+            </div>
+          </div>
+    
+          <div class="balance">
+            <i class="fa-solid fa-indian-rupee-sign icon"></i>
+            <div class="info">
+              <h5>INR</h5>
+              <span><i class="fa-solid fa-indian-rupee-sign"></i>220,000.00</span>
+            </div>
+          </div>
+    
+          <div class="balance">
+            <i class="fa-solid fa-sterling-sign icon"></i>
+            <div class="info">
+              <h5>Pound</h5>
+              <span><i class="fa-solid fa-sterling-sign"></i>30,000.00</span>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    </body>
+    </html>
+    </span>

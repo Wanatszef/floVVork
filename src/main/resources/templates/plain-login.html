@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Login form</title>
+</head>
+<body>
+<h1>Logowanie SpringBoot</h1>
+<form action="#" th:action="@{/authenticateUser}" method="POST">
+
+
+
+  <!--Check for login error -->
+  <div th:if="${param.error}">
+    <i>Sorry! You entered invalid username/password.</i>
+  </div>
+
+
+  Email: <input type="text" name="username">
+
+  <br>
+  Password: <input type="password" name="password">
+
+  <input type="submit" value="Login">
+
+</form>
+</body>
+</body>
+</html>
