@@ -10,7 +10,7 @@ public class Document
 {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
     private int document_id;
 

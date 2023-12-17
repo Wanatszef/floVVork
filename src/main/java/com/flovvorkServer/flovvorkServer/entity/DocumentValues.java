@@ -9,8 +9,8 @@ public class DocumentValues
 {
     @Id
     @Column(name = "document_values_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int documentValuesId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int documentValuesId = 0;
 
     @Column(name = "text1")
     private String text1;
@@ -59,6 +59,7 @@ public class DocumentValues
 
     public DocumentValues()
     {
+        documentValuesId = 0;
         number1 = 0;
         number2 = 0;
         number3 = 0;

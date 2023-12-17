@@ -84,7 +84,7 @@ public class AddUserController
 
         documentRepository.save(document);
 
-        return "dashboard";
+        return "redirect:http://localhost:8080";
     }
 
 

@@ -19,7 +19,7 @@
           </div>
         </div>
       </header>
-      <form id="userForm" action="/sendToSupervisor" method="POST" th:object="${values}">
+      <form id="userForm" action="/sendToSupervisor" method="POST" th:object="${values}" >
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
       <div class="main">
 
@@ -54,7 +54,7 @@
             </div>
           </div>
           <div class="save">
-            <button type="submit" form="userForm" formaction="saveUserEdit" > Save </button>
+            <button type="submit" form="userForm" formaction="saveUserEdit" th:action="@{/saveUserEdit}"> Save </button>
           </div>
           <div class="send">
             <button type="submit" form="userForm"  >Send to supervisor</button>
