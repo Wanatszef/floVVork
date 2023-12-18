@@ -11,6 +11,8 @@ public interface DocumentRepository extends JpaRepository<Document, Integer>
 {
     List<Document> findDocumentByUser(User user);
 
-    List<Document> findDocumentByUserAndActiveIsLike(User user,int inactive);
+    List<Document> findDocumentByUserAndActiveIsLike(User user,int active);
+
+    List<Document> findDocumentsByActiveAndUser(int active, User user);
 
 }

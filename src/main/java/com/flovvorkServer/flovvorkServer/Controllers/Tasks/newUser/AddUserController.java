@@ -50,6 +50,26 @@ public class AddUserController
 
         User user = userRepository.findByUsername(username);
 
+        if(user == null)
+        {
+            return "accessDenied";
+        }
+
+        else
+        {
+            model.addAttribute(user);
+            return "newUser/newUser";
+        }
+    }
+
+    @PostMapping("saveUserEdit")
+    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document)
+    {
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username);
+
         if(user != null)
         {
 
@@ -69,16 +89,8 @@ public class AddUserController
 
             document.setUser(user);
 
-            document.setPreviousUser(null);
+            document.setPreviousUser(user);
         }
-        else return "accessDenied";
-
-        return "newUser/newUser";
-    }
-
-    @PostMapping("saveUserEdit")
-    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document)
-    {
 
         documentValuesRepository.save(values);
 
