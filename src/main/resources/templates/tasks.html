@@ -59,7 +59,7 @@
                    <td th:text="${document.getDocumentName()}"></td>
                    <td th:text="${document.getTitle()}"></td>
                    <td th:text="${document.getExpireDate()}"></td>
-                   <td th:text="open" th:href=""></td>
+                   <td><a th:text="open" th:href="@{/savedUser/{documentId}(documentId=${document.getDocument_id()})}"></a></td>
                  </tr>
                 </tbody>
               </table>

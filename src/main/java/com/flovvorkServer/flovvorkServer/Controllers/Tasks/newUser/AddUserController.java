@@ -8,13 +8,16 @@ import com.flovvorkServer.flovvorkServer.entity.DocumentValues;
 import com.flovvorkServer.flovvorkServer.entity.User;
 import com.flovvorkServer.flovvorkServer.entity.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.print.Doc;
 import java.time.LocalDate;
 
 @Controller
@@ -99,6 +102,35 @@ public class AddUserController
         return "redirect:http://localhost:8080";
     }
 
+
+    @GetMapping("savedUser/{documentId}")
+    public String openSaved(@PathVariable Long documentId, Authentication authentication, Model model)
+    {
+        Document document = documentRepository.findByDocumentId(documentId);
+
+        DocumentValues documentValues = document.getDocumentValues();
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username);
+
+        model.addAttribute("document", document);
+
+        model.addAttribute("values",documentValues);
+
+
+        if(user == null)
+        {
+            return "accessDenied";
+        }
+
+        else
+        {
+            model.addAttribute(user);
+            return "newUser/newUser";
+        }
+
+    }
 
 }
 

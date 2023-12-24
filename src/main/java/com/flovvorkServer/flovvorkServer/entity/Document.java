@@ -12,7 +12,7 @@ public class Document
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
-    private int document_id;
+    private long documentId;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -45,9 +45,9 @@ public class Document
     @JoinColumn(name = "update_date")
     private LocalDate updateDate;
 
-
     public Document()
-    {}
+    {
+    }
 
     public Document(User user, String documentName, int active, String title, DocumentValues documentValues, User previousUser, LocalDate expireDate, LocalDate createDate, LocalDate updateDate) {
         this.user = user;
@@ -61,12 +61,12 @@ public class Document
         this.updateDate = updateDate;
     }
 
-    public int getDocument_id() {
-        return document_id;
+    public long getDocument_id() {
+        return documentId;
     }
 
-    public void setDocument_id(int document_id) {
-        this.document_id = document_id;
+    public void setDocument_id(long document_id) {
+        this.documentId = document_id;
     }
 
     public User getUser() {
@@ -144,7 +144,7 @@ public class Document
     @Override
     public String toString() {
         return "Document{" +
-                "document_id=" + document_id +
+                "document_id=" + documentId +
                 ", user=" + user +
                 ", documentName='" + documentName + '\'' +
                 ", active=" + active +
