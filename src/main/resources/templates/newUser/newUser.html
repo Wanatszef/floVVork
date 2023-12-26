@@ -21,6 +21,7 @@
       </header>
       <form id="userForm" action="/saveUserEdit" method="POST" th:object="${values}" >
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <input type="hidden" id="documentID" th:value="${document.getDocument_id()}">
       <div class="main">
 
           <div class="basicInfo">

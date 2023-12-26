@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.print.Doc;
 import java.time.LocalDate;
@@ -66,41 +63,42 @@ public class AddUserController
     }
 
     @PostMapping("saveUserEdit")
-    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document)
-    {
-
+    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document, @RequestParam String documentID) {
         String username = authentication.getName();
-
         User user = userRepository.findByUsername(username);
 
-        if(user != null)
-        {
+        if (user != null) {
+            if (document.getDocument_id() != 0) {
+                Document existingDocument = documentRepository.findByDocumentId(document.getDocument_id());
+                if (existingDocument != null) {
+                    System.out.println("saving existing document");
+                    existingDocument.setDocumentValues(values);
+                    documentValuesRepository.save(values);
+                    documentRepository.save(existingDocument);
+                    return "redirect:http://localhost:8080";
+                }
+            } else {
+                System.out.println("creating new document");
+                document.setDocumentValues(values);
+                document.setDocumentName("newUser/newUser");
+                document.setActive(1);
+                document.setCreateDate(LocalDate.now());
+                document.setTitle("New user draft");
+                document.setUpdateDate(LocalDate.now());
+                model.addAttribute("user", user);
+                document.setUser(user);
+                document.setPreviousUser(user);
 
-            document.setDocumentValues(values);
+                documentValuesRepository.save(values);
+                documentRepository.save(document);
 
-            document.setDocumentName("newUser/newUser");
-
-            document.setActive(1);
-
-            document.setCreateDate(LocalDate.now());
-
-            document.setTitle("New user draft");
-
-            document.setUpdateDate(LocalDate.now());
-
-            model.addAttribute("user", user);
-
-            document.setUser(user);
-
-            document.setPreviousUser(user);
+                return "redirect:http://localhost:8080";
+            }
         }
-
-        documentValuesRepository.save(values);
-
-        documentRepository.save(document);
 
         return "redirect:http://localhost:8080";
     }
+
 
 
     @GetMapping("savedUser/{documentId}")
