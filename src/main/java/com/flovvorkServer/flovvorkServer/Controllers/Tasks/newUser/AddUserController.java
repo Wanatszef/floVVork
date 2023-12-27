@@ -63,15 +63,14 @@ public class AddUserController
     }
 
     @PostMapping("saveUserEdit")
-    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document, @RequestParam String documentID) {
+    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document, @RequestParam int documentID) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
 
         if (user != null) {
-            if (document.getDocument_id() != 0) {
-                Document existingDocument = documentRepository.findByDocumentId(document.getDocument_id());
+            if (documentID != 0) {
+                Document existingDocument = documentRepository.findByDocumentId(Integer.toUnsignedLong(documentID));
                 if (existingDocument != null) {
-                    System.out.println("saving existing document");
                     existingDocument.setDocumentValues(values);
                     documentValuesRepository.save(values);
                     documentRepository.save(existingDocument);
@@ -104,6 +103,7 @@ public class AddUserController
     @GetMapping("savedUser/{documentId}")
     public String openSaved(@PathVariable Long documentId, Authentication authentication, Model model)
     {
+
         Document document = documentRepository.findByDocumentId(documentId);
 
         DocumentValues documentValues = document.getDocumentValues();
@@ -112,20 +112,19 @@ public class AddUserController
 
         User user = userRepository.findByUsername(username);
 
-        model.addAttribute("document", document);
-
-        model.addAttribute("values",documentValues);
-
-
-        if(user == null)
+        if(document.getUser() == user)
         {
-            return "accessDenied";
-        }
+            model.addAttribute("document", document);
 
+            model.addAttribute("values",documentValues);
+
+            model.addAttribute("user",user);
+
+            return "newUser/newUser";
+        }
         else
         {
-            model.addAttribute(user);
-            return "newUser/newUser";
+            return "accessDenied";
         }
 
     }
