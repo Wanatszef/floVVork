@@ -12,7 +12,6 @@ public class TaskAccess
     private int taskAccessID;
 
 
-
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User userId;

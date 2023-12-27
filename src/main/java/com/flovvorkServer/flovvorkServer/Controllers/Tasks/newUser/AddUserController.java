@@ -1,12 +1,7 @@
 package com.flovvorkServer.flovvorkServer.Controllers.Tasks.newUser;
 
-import com.flovvorkServer.flovvorkServer.Service.DocumentRepository;
-import com.flovvorkServer.flovvorkServer.Service.DocumentValuesRepository;
-import com.flovvorkServer.flovvorkServer.Service.UserRepository;
-import com.flovvorkServer.flovvorkServer.entity.Document;
-import com.flovvorkServer.flovvorkServer.entity.DocumentValues;
-import com.flovvorkServer.flovvorkServer.entity.User;
-import com.flovvorkServer.flovvorkServer.entity.UserDetails;
+import com.flovvorkServer.flovvorkServer.Service.*;
+import com.flovvorkServer.flovvorkServer.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,13 +21,19 @@ public class AddUserController
 
     DocumentValuesRepository documentValuesRepository;
 
+    TaskCreatorRepository taskCreatorRepository;
+
+    TaskRepository taskRepository;
+
 
     @Autowired
-    public AddUserController(UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository)
+    public AddUserController(TaskCreatorRepository taskCreatorRepository, UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository, TaskRepository taskRepository)
     {
+        this.taskCreatorRepository = taskCreatorRepository;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.documentValuesRepository = documentValuesRepository;
+        this.taskRepository = taskRepository;
     }
 
     @GetMapping("newUser")
@@ -68,30 +69,54 @@ public class AddUserController
         User user = userRepository.findByUsername(username);
 
         if (user != null) {
-            if (documentID != 0) {
+            if (documentID != 0)
+            {
                 Document existingDocument = documentRepository.findByDocumentId(Integer.toUnsignedLong(documentID));
-                if (existingDocument != null) {
-                    existingDocument.setDocumentValues(values);
-                    documentValuesRepository.save(values);
-                    documentRepository.save(existingDocument);
-                    return "redirect:http://localhost:8080";
+                if (existingDocument != null)
+                {
+                    if(existingDocument.getUser() == user)
+                    {
+                        existingDocument.setDocumentValues(values);
+                        documentValuesRepository.save(values);
+                        documentRepository.save(existingDocument);
+                        return "redirect:http://localhost:8080";
+                    }
+                    else
+                    {
+                        return "accessDenied";
+                    }
                 }
-            } else {
-                System.out.println("creating new document");
-                document.setDocumentValues(values);
-                document.setDocumentName("newUser/newUser");
-                document.setActive(1);
-                document.setCreateDate(LocalDate.now());
-                document.setTitle("New user draft");
-                document.setUpdateDate(LocalDate.now());
-                model.addAttribute("user", user);
-                document.setUser(user);
-                document.setPreviousUser(user);
+            }
+            else
+            {
+                Task task = taskRepository.findByIdTask(1);
+                if(task != null)
+                {
+                    TaskAccess taskAccess = taskCreatorRepository.findByTaskAndUserId(task,user);
+                    if(taskAccess != null)
+                    {
+                        System.out.println("creating new document");
+                        document.setDocumentValues(values);
+                        document.setDocumentName("newUser/newUser");
+                        document.setActive(1);
+                        document.setCreateDate(LocalDate.now());
+                        document.setTitle("New user draft");
+                        document.setUpdateDate(LocalDate.now());
+                        model.addAttribute("user", user);
+                        document.setUser(user);
+                        document.setPreviousUser(user);
 
-                documentValuesRepository.save(values);
-                documentRepository.save(document);
+                        documentValuesRepository.save(values);
+                        documentRepository.save(document);
 
-                return "redirect:http://localhost:8080";
+                        return "redirect:http://localhost:8080";
+                    }
+                    else
+                    {
+                        return "accessDenied";
+                    }
+                }
+                else return "accessDenied";
             }
         }
 
