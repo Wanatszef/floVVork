@@ -97,7 +97,6 @@ nav{
 .history_lists{
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-around;
     background-color: whitesmoke;
     border-radius: 8px;
@@ -105,9 +104,12 @@ nav{
     width: 800px;
 }
 
-.history_lists image
+.history_lists img
 {
     border-radius: 50%;
+    width: 200;
+    height: 200;
+    margin-left: 38%;
 }
 
 
@@ -137,6 +139,20 @@ nav{
 }
 .balance .info i{
     margin-right: 2px;
+}
+
+.information
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 20%;
+    padding-right: 20%;
+    border-bottom: rgb(139, 105, 80);
+    border-style: solid;
+    border-top: #fff;
+    border-left: #fff;
+    border-right: #fff;
 }
 
 

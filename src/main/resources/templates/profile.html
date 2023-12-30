@@ -34,14 +34,27 @@
       </nav>
 
       <div class="main-body">
-        <h2>Tasks</h2>
 
         <div class="history_lists">
-              <img src="avatar.jpg" alt="Avatar">
-              <a>Name</a>
-              <a>Second Name</a>
-              <a>Phone</a>
-              <a>Email</a>
+          <img src="avatar.jpg" alt="Avatar">
+          <div class="information">
+            <a>Name</a>
+            <a th:text="${user.userDetails.getFirstName()}"></a>
+          </div>
+          <div class="information">
+            <a>Second Name</a>
+            <a th:text="${user.userDetails.getSecondName()}"></a>
+          </div>
+          <div class="information">
+            <a>Email</a>
+            <a th:text="${user.userDetails.getEmail()}"></a>
+          </div>
+          <div class="information">
+            <a>Phone Number</a>
+            <a th:text="${user.userDetails.getPhoneNumber()}"></a>
+          </div>
+            <button>Edit</button>
+            <button>Logout</button>
         </div>
 
       </div>
