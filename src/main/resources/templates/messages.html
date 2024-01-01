@@ -1,0 +1,68 @@
+<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+  <html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FloVVork | Tasks</title>
+    <link rel="stylesheet" href="addUserStyle.css" />
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <a href="/">FloVVork</a>
+      </div>
+
+      <div class="header-icons">
+        <div class="account">
+          <img src="./pic/img.jpg" alt="">
+          <h4><span th:text="${user.getUsername()}"></span></h4>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <nav>
+        <div class="side_navbar">
+          <span>Main Menu</span>
+          <a href="/">Dashboard</a>
+          <a href="profile" class="active">Profile</a>
+          <a href="tasks">My tasks</a>
+          <a href="createTask" >Create Task</a>
+          <a href="#" style="color: red;">Logout</a>
+
+        </div>
+      </nav>
+
+      <div class="main-body">
+
+        <div class="messagesList">
+
+
+          <div class="messages">
+            <div class="message"></div>
+          </div>
+
+
+          <div class="chat">
+            <div class="conversation"></div>
+
+            <div class="messageInput">
+              <form action="POST">
+                <input type="text" class="textInput">
+                <input type="submit">
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="sidebar">
+
+      </div>
+
+    </div>
+  </body>
+  </html>
+  </span>

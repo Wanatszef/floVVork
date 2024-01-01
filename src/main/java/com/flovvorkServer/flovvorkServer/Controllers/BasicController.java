@@ -4,6 +4,7 @@ import com.flovvorkServer.flovvorkServer.Service.DocumentRepository;
 import com.flovvorkServer.flovvorkServer.Service.TaskCreatorRepository;
 import com.flovvorkServer.flovvorkServer.Service.UserRepository;
 import com.flovvorkServer.flovvorkServer.entity.Document;
+import com.flovvorkServer.flovvorkServer.entity.Message;
 import com.flovvorkServer.flovvorkServer.entity.TaskAccess;
 import com.flovvorkServer.flovvorkServer.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -24,12 +24,15 @@ public class BasicController
 
     private final TaskCreatorRepository taskCreatorRepository;
 
+    private final MessagesController messagesController;
+
     @Autowired
-    public BasicController(UserRepository userRepository, DocumentRepository documentRepository, TaskCreatorRepository taskCreatorRepository)
+    public BasicController(UserRepository userRepository, DocumentRepository documentRepository, TaskCreatorRepository taskCreatorRepository, MessagesController messagesController)
     {
         this.documentRepository = documentRepository;
         this.userRepository = userRepository;
         this.taskCreatorRepository = taskCreatorRepository;
+        this.messagesController = messagesController;
     }
 
 
@@ -43,6 +46,8 @@ public class BasicController
 
         List<Document> activeDocuments = documentRepository.findDocumentByUserAndActiveIsLike(user,1);
 
+        List<Message> lastMessages = messagesController.getLastMessages(authentication);
+
 
         String tasksCount = String.valueOf(activeDocuments.size());
         if(user != null)
@@ -51,6 +56,11 @@ public class BasicController
             if(!historyDocuments.isEmpty())
             {
                 model.addAttribute("historyDocuments", historyDocuments);
+            }
+
+            if(!lastMessages.isEmpty())
+            {
+                model.addAttribute("messages",lastMessages);
             }
 
             if(!activeDocuments.isEmpty())

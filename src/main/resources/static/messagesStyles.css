@@ -1,0 +1,130 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+body{
+    background: rgb(219, 219, 219);
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 20px;
+    background: #fff;
+}
+.logo{
+    display: flex;
+    align-items: center;
+}
+.logo a{
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 2rem 8rem 2rem 2rem;
+}
+
+.container{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Side menubar section */
+nav{
+    background: #fff;
+    border-radius: 8px;
+}
+.side_navbar{
+    padding: 1px;
+    display: flex;
+    flex-direction: column;
+}
+.side_navbar span{
+    color: rgb(128, 128, 128);
+    margin: 1rem 3rem;
+    font-size: 12px;
+}
+.side_navbar a{
+    width: 100%;
+    padding: 0.8rem 3rem;
+    font-weight: 500;
+    font-size: 15px;
+    color: rgb(100, 100, 100);
+}
+.links{
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+.links a{
+    font-size: 13px;
+}
+.side_navbar a:hover{
+    background: rgb(235, 235, 235);
+}
+.side_navbar .active{
+    border-left: 2px solid rgb(100, 100, 100);
+    background-color: rgb(216, 184, 156);
+}
+
+
+.messagesList{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    background-color: whitesmoke;
+    border-radius: 8px;
+    height: 90%;
+    width: 1300px;
+}
+
+
+/* Sidebar Section */
+.sidebar{
+    border-radius: 8px;
+    width: 15%;
+    padding: 2rem 1rem;
+    background: rgb(219, 219, 219);
+}
+
+.messages
+{
+    border-style: double;
+    border-color: #000;
+}
+
+.chat
+{
+    display: grid;
+    grid-template-rows: 90% 10%;
+    border-style: double;
+    border-color: #000;
+}
+
+.conversation
+{
+    background-color: #000;
+}
+
+.messageInput
+{
+    display: flexbox;
+}
+
+.messageInput .textInput
+{
+    width: 80%;
+}
+
+
+
+
+
