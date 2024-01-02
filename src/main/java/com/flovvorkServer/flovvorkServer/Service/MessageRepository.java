@@ -21,5 +21,6 @@ public interface MessageRepository extends JpaRepository<Message, Long>
     @Query("SELECT m FROM Message m WHERE m.receiver = :receiver AND m.timestamp IN (SELECT MAX(m.timestamp) FROM Message m WHERE m.receiver = :receiver GROUP BY COALESCE(m.sender, m.receiver))")
     List<Message> findLatestMessagesToReceiver(@Param("receiver") User receiver);
 
-
+    @Query("SELECT m from Message m where m.receiver = :receiver and m.sender = :sender")
+    List<Message> findMessagesReceviedFromSpecifiedSender(@Param("sender") User sender, @Param("receiver") User receiver);
 }

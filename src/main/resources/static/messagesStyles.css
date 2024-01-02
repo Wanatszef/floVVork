@@ -97,8 +97,13 @@ nav{
 
 .messages
 {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
     border-style: double;
     border-color: #000;
+    overflow: auto;
+    max-height: 600px;
 }
 
 .chat
@@ -111,7 +116,7 @@ nav{
 
 .conversation
 {
-    background-color: #000;
+    background-color: wheat;
 }
 
 .messageInput
@@ -122,6 +127,15 @@ nav{
 .messageInput .textInput
 {
     width: 80%;
+}
+
+.message
+{
+    border-style: groove;
+    border-color: black;
+    width: 100%;
+    padding: 10px;
+
 }
 
 

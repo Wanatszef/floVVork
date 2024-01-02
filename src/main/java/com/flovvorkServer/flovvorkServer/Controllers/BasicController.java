@@ -58,9 +58,12 @@ public class BasicController
                 model.addAttribute("historyDocuments", historyDocuments);
             }
 
-            if(!lastMessages.isEmpty())
+            if(lastMessages != null)
             {
-                model.addAttribute("messages",lastMessages);
+                if (!lastMessages.isEmpty())
+                {
+                    model.addAttribute("messages", lastMessages);
+                }
             }
 
             if(!activeDocuments.isEmpty())

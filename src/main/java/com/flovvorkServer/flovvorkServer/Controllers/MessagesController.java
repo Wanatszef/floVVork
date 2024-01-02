@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/message")
@@ -62,4 +65,52 @@ public class MessagesController
         messageRepository.save(message);
         return "Message sent successfully.";
     }
+
+    @GetMapping("getMessages")
+    public String getMessages(Authentication authentication, Model model)
+    {
+        User user = userRepository.findByUsername(authentication.getName());
+        model.addAttribute("user", user);
+
+        if(user!=null)
+        {
+            List<Message> messages = messageRepository.findLatestMessagesToReceiver(user);
+            if(!messages.isEmpty())
+            {
+                model.addAttribute("messages",messages);
+            }
+
+        }
+
+
+        return "messages";
+    }
+
+    /*
+    @GetMapping("/message/{messageID}")
+    public List<Message> getMessages(@PathVariable long messageID, Authentication authentication, Model model)
+    {
+        List<Message> messages;
+        User user = userRepository.findByUsername(authentication.getName());
+        if(user!=null)
+        {
+            Message tempMessage;
+            Optional<Message> message = messageRepository.findById(messageID);
+            if(message.isPresent()) {
+                tempMessage = message.get();
+
+                if(tempMessage.getSender()==user||tempMessage.getReceiver()==user)
+                {
+                    messages = messageRepository.findLatestMessagesBetweenUsers(tempMessage.getSender(),tempMessage.getReceiver());
+                    if(!messages.isEmpty())
+                    {
+                        return messages;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+     */
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>FloVVork | Tasks</title>
-    <link rel="stylesheet" href="addUserStyle.css" />
+    <link rel="stylesheet" th:href="@{/messagesStyles.css}" />
     <!-- Font Awesome Cdn Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
   </head>
@@ -39,12 +39,22 @@
 
 
           <div class="messages">
-            <div class="message"></div>
+            <div class="message" th:each="message : ${messages}" th:data-message-id="${message.getId()}">
+              <h4 th:text="${message.getSender().getUsername()}"></h4>
+              <a th:text="${message.getContent()}"></a>
+            </div>
+            th:href="@{/savedUser/{documentId}(documentId=${document.getDocument_id()})}
+            <div class="message" th:each="message : ${messages}">
+              <h4 th:text="${message.getSender().getUsername()}"></h4>
+              <a th:text="${message.getContent()}"></a>
+            </div>
           </div>
 
 
           <div class="chat">
-            <div class="conversation"></div>
+            <div class="conversation">
+
+            </div>
 
             <div class="messageInput">
               <form action="POST">
@@ -63,6 +73,37 @@
       </div>
 
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var messageDivs = document.querySelectorAll('.messages .message');
+      var conversationDiv = document.querySelector('.conversation');
+
+      messageDivs.forEach(function (messageDiv) {
+        messageDiv.addEventListener('click', function () {
+          // Pobierz identyfikator wiadomości z atrybutu data-message-id
+          var messageId = messageDiv.getAttribute('data-message-id');
+          // Wywołaj funkcję do pobrania danych z endpointa
+          getMessageContent(messageId);
+        });
+      });
+
+      function getMessageContent(messageId) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Ustaw zawartość diva "conversation" na pobraną treść wiadomości
+            conversationDiv.innerHTML = xhr.responseText;
+          }
+        };
+
+        // Zdefiniuj metodę i endpoint
+        xhr.open('GET', '/api/messages/' + messageId, true);
+        // Wyślij zapytanie
+        xhr.send();
+      }
+    });
+</script>
   </body>
   </html>
   </span>
