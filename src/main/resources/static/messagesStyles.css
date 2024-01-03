@@ -117,6 +117,7 @@ nav{
 .conversation
 {
     background-color: wheat;
+    overflow: auto;
 }
 
 .messageInput
@@ -138,6 +139,23 @@ nav{
 
 }
 
+.conversation .message.received {
+    float: left;
+    clear: both;
+    max-width: 50%;
+    box-sizing: border-box;
+    background-color: #f0f0f0; /* Dodaj dowolny kolor tła */
+    border-radius: 8px;
+}
+
+.conversation .message.sent {
+    float: right;
+    clear: both;
+    max-width: 50%;
+    box-sizing: border-box;
+    background-color: #e6f7ff; /* Dodaj dowolny kolor tła */
+    border-radius: 8px;
+}
 
 
 

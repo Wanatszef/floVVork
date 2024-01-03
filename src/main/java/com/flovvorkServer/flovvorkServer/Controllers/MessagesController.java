@@ -45,7 +45,6 @@ public class MessagesController
         {
             return messages;
         }
-
     }
 
     @PostMapping("/send")
@@ -58,19 +57,21 @@ public class MessagesController
         User receiver = userRepository.findByIdUser(receiverId);
 
         if (sender == null || receiver == null) {
-            return "Invalid sender or receiver.";
+            return "message hasn't send";
         }
 
         Message message = new Message(content, LocalDateTime.now(),sender,receiver);
         messageRepository.save(message);
-        return "Message sent successfully.";
+        return "redirect:/message";
     }
 
     @GetMapping("getMessages")
     public String getMessages(Authentication authentication, Model model)
     {
+
         User user = userRepository.findByUsername(authentication.getName());
         model.addAttribute("user", user);
+        model.addAttribute("tempMessage", new Message());
 
         if(user!=null)
         {

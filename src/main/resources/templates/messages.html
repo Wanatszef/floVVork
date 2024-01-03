@@ -16,7 +16,7 @@
       <div class="header-icons">
         <div class="account">
           <img src="./pic/img.jpg" alt="">
-          <h4><span th:text="${user.getUsername()}"></span></h4>
+          <h4><span id="username" th:text="${user.getUsername()}"></span></h4>
         </div>
       </div>
     </header>
@@ -43,11 +43,6 @@
               <h4 th:text="${message.getSender().getUsername()}"></h4>
               <a th:text="${message.getContent()}"></a>
             </div>
-            th:href="@{/savedUser/{documentId}(documentId=${document.getDocument_id()})}
-            <div class="message" th:each="message : ${messages}">
-              <h4 th:text="${message.getSender().getUsername()}"></h4>
-              <a th:text="${message.getContent()}"></a>
-            </div>
           </div>
 
 
@@ -56,12 +51,15 @@
 
             </div>
 
-            <div class="messageInput">
-              <form action="POST">
-                <input type="text" class="textInput">
-                <input type="submit">
-              </form>
+            <div class="messageInput" action="/send">
+              <form id="messageForm" th:action="@{/message/send}" th:object="${tempMessage}">
+                <input type="text" class="textInput" id="messageContent" placeholder="Type your message...">
+                <input type="hidden" id="senderId" th:field="*{sender}" th:value="${user.getIdUser()}">
+                <input type="hidden" id="receiverId" th:field="*{receiver}">
+                <input type="submit" value="Send">
+              </form>receiver
             </div>
+
           </div>
 
         </div>
@@ -77,14 +75,24 @@
     document.addEventListener('DOMContentLoaded', function () {
       var messageDivs = document.querySelectorAll('.messages .message');
       var conversationDiv = document.querySelector('.conversation');
+      var usernameElement = document.getElementById("username");
+      var username = usernameElement.textContent || usernameElement.innerText;
+      var messageForm = document.getElementById("messageForm");
 
       messageDivs.forEach(function (messageDiv) {
         messageDiv.addEventListener('click', function () {
-          // Pobierz identyfikator wiadomości z atrybutu data-message-id
           var messageId = messageDiv.getAttribute('data-message-id');
-          // Wywołaj funkcję do pobrania danych z endpointa
           getMessageContent(messageId);
         });
+      });
+
+      messageForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var receiverId = document.getElementById('receiverId').value;
+        var content = document.getElementById('messageContent').value;
+
+        sendMessage(receiverId, content);
       });
 
       function getMessageContent(messageId) {
@@ -92,17 +100,55 @@
 
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
-            // Ustaw zawartość diva "conversation" na pobraną treść wiadomości
-            conversationDiv.innerHTML = xhr.responseText;
+            var messages = JSON.parse(xhr.responseText);
+            displayMessages(messages);
           }
         };
 
-        // Zdefiniuj metodę i endpoint
         xhr.open('GET', '/api/messages/' + messageId, true);
-        // Wyślij zapytanie
         xhr.send();
       }
+
+      function displayMessages(messages) {
+        // Wyczyszczenie istniejącej zawartości conversationDiv
+        conversationDiv.innerHTML = "";
+
+        messages.forEach(function (message) {
+          var messageDiv = document.createElement('div');
+          messageDiv.classList.add('message');
+
+          // Sprawdzenie, czy wiadomość była odebrana czy wysłana
+          if (message.senderUsername === username) {
+            messageDiv.classList.add('sent');
+          } else {
+            messageDiv.classList.add('received');
+          }
+
+          // Dodanie treści wiadomości do diva
+          messageDiv.innerHTML = "<p>" + message.content + "</p>";
+
+          // Dodanie diva z wiadomością do conversationDiv
+          conversationDiv.appendChild(messageDiv);
+        });
+      }
+
+      function sendMessage(receiverId, content) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Po wysłaniu wiadomości odśwież konwersację
+            var messageId = JSON.parse(xhr.responseText).id;
+            getMessageContent(messageId);
+          }
+        };
+
+        xhr.open('POST', '/message/send', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('receiverId=' + receiverId + '&content=' + content);
+      }
     });
+
 </script>
   </body>
   </html>
