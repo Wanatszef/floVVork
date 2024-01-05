@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 
 @RestController
 @RequestMapping("api/messages")
@@ -40,28 +39,30 @@ public class RestMessageController
             Optional<Message> message = messageRepository.findById(messageID);
             if(message.isPresent()) {
                 tempMessage = message.get();
-
-                if(tempMessage.getSender()==user||tempMessage.getReceiver()==user)
+                if(tempMessage.getSender().getIdUser().equals(user.getIdUser())||tempMessage.getReceiver().getIdUser().equals(user.getIdUser()))
                 {
                     List<MessageDTO> messagesDTOList = new ArrayList<>();
-                    sentMessages = messageRepository.findMessagesReceviedFromSpecifiedSender(user,tempMessage.getSender());
-                    receivedMessages = messageRepository.findMessagesReceviedFromSpecifiedSender(tempMessage.getSender(),user);
+                    sentMessages = messageRepository.findAllMessagesBetweenUsers(user, tempMessage.getReceiver());
+                    System.out.println(sentMessages);
+                    receivedMessages = messageRepository.findAllMessagesBetweenUsers(user,tempMessage.getSender());
+                    System.out.println(receivedMessages);
                     if(sentMessages!=null && !sentMessages.isEmpty())
                     {
                         for(Message msg: sentMessages)
                         {
-                            messagesDTOList.add(new MessageDTO(msg.getSender().getUsername(),msg.getReceiver().getUsername(),msg.getContent(),msg.getTimestamp()));
+                            messagesDTOList.add(new MessageDTO(msg.getSender().getUsername(),msg.getReceiver().getUsername(),msg.getContent(),msg.getTimestamp(), msg.getSender().getIdUser(), msg.getReceiver().getIdUser()));
                         }
                     }
                     if(receivedMessages!=null && !receivedMessages.isEmpty())
                     {
                         for(Message msg: receivedMessages)
                         {
-                            messagesDTOList.add(new MessageDTO(msg.getSender().getUsername(),msg.getReceiver().getUsername(),msg.getContent(),msg.getTimestamp()));
+                            messagesDTOList.add(new MessageDTO(msg.getSender().getUsername(),msg.getReceiver().getUsername(),msg.getContent(),msg.getTimestamp(), msg.getSender().getIdUser(), msg.getReceiver().getIdUser()));
                         }
                     }
                     if (!messagesDTOList.isEmpty())
                     {
+                        messagesDTOList.sort(Comparator.comparing(MessageDTO::getTimestamp));
                         return messagesDTOList;
                     }
 
@@ -70,4 +71,6 @@ public class RestMessageController
         }
         return null;
     }
+
+
 }

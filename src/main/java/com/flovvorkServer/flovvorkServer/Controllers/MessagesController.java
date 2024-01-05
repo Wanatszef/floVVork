@@ -48,39 +48,40 @@ public class MessagesController
     }
 
     @PostMapping("/send")
-    public String sendMessage(@RequestParam Long receiverId, @RequestParam String content, Authentication authentication) {
+    public String sendMessage(@ModelAttribute("tempMessage") Message message, Authentication authentication) {
 
-        String senderName = authentication.getName();
-
-        User sender = userRepository.findByUsername(senderName);
-
-        User receiver = userRepository.findByIdUser(receiverId);
-
-        if (sender == null || receiver == null) {
-            return "message hasn't send";
-        }
-
-        Message message = new Message(content, LocalDateTime.now(),sender,receiver);
+        message.setTimestamp(LocalDateTime.now());
+        message.setSender(userRepository.findByUsername(authentication.getName()));
         messageRepository.save(message);
-        return "redirect:/message";
+
+
+        return "redirect:/message/getMessages";
     }
 
     @GetMapping("getMessages")
     public String getMessages(Authentication authentication, Model model)
     {
-
+        List<Message> messages = new ArrayList<>();
         User user = userRepository.findByUsername(authentication.getName());
         model.addAttribute("user", user);
         model.addAttribute("tempMessage", new Message());
 
-        if(user!=null)
-        {
-            List<Message> messages = messageRepository.findLatestMessagesToReceiver(user);
-            if(!messages.isEmpty())
-            {
-                model.addAttribute("messages",messages);
+        if (user != null) {
+            List<User> restUsers = userRepository.findAll();
+            for (User tempUser : restUsers) {
+                if (!user.getIdUser().equals(tempUser.getIdUser())) {
+                    Message latestMessage = messageRepository.findLatestMessageBetweenUsers(user, tempUser);
+                    if (latestMessage != null) {
+                        messages.add(latestMessage);
+                    }
+                }
             }
 
+            if (!messages.isEmpty()) {
+                model.addAttribute("messages", messages);
+            } else {
+                return "accessDenied";
+            }
         }
 
 

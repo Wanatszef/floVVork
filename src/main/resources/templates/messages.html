@@ -52,12 +52,12 @@
             </div>
 
             <div class="messageInput" action="/send">
-              <form id="messageForm" th:action="@{/message/send}" th:object="${tempMessage}">
-                <input type="text" class="textInput" id="messageContent" placeholder="Type your message...">
-                <input type="hidden" id="senderId" th:field="*{sender}" th:value="${user.getIdUser()}">
-                <input type="hidden" id="receiverId" th:field="*{receiver}">
+              <form id="messageForm" th:action="@{/message/send}" th:object="${tempMessage}" method="POST">
+                <input type="text" class="textInput" id="messageContent" placeholder="Type your message..." th:field="*{content}">
+                <input type="text" id="senderId" th:field="*{sender}" th:value="${user.getUsername()}">
+                <input type="text" id="receiverId" th:field="*{receiver}">
                 <input type="submit" value="Send">
-              </form>receiver
+              </form>
             </div>
 
           </div>
@@ -77,22 +77,13 @@
       var conversationDiv = document.querySelector('.conversation');
       var usernameElement = document.getElementById("username");
       var username = usernameElement.textContent || usernameElement.innerText;
-      var messageForm = document.getElementById("messageForm");
+      var receiverInput = document.getElementById("receiverId");
 
       messageDivs.forEach(function (messageDiv) {
         messageDiv.addEventListener('click', function () {
           var messageId = messageDiv.getAttribute('data-message-id');
           getMessageContent(messageId);
         });
-      });
-
-      messageForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        var receiverId = document.getElementById('receiverId').value;
-        var content = document.getElementById('messageContent').value;
-
-        sendMessage(receiverId, content);
       });
 
       function getMessageContent(messageId) {
@@ -112,7 +103,6 @@
       function displayMessages(messages) {
         // Wyczyszczenie istniejącej zawartości conversationDiv
         conversationDiv.innerHTML = "";
-
         messages.forEach(function (message) {
           var messageDiv = document.createElement('div');
           messageDiv.classList.add('message');
@@ -120,33 +110,22 @@
           // Sprawdzenie, czy wiadomość była odebrana czy wysłana
           if (message.senderUsername === username) {
             messageDiv.classList.add('sent');
+            receiverInput.value = message.receiverID;
           } else {
             messageDiv.classList.add('received');
+            receiverInput.value = message.senderID;
           }
 
           // Dodanie treści wiadomości do diva
           messageDiv.innerHTML = "<p>" + message.content + "</p>";
+
 
           // Dodanie diva z wiadomością do conversationDiv
           conversationDiv.appendChild(messageDiv);
         });
       }
 
-      function sendMessage(receiverId, content) {
-        var xhr = new XMLHttpRequest();
 
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            // Po wysłaniu wiadomości odśwież konwersację
-            var messageId = JSON.parse(xhr.responseText).id;
-            getMessageContent(messageId);
-          }
-        };
-
-        xhr.open('POST', '/message/send', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('receiverId=' + receiverId + '&content=' + content);
-      }
     });
 
 </script>

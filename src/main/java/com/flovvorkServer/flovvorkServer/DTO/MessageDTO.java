@@ -9,6 +9,8 @@ public class MessageDTO
     private String receiverUsername;
     private String content;
     private LocalDateTime timestamp;
+    private long receiverID;
+    private long senderID;
 
     public String getSenderUsername() {
         return senderUsername;
@@ -42,14 +44,28 @@ public class MessageDTO
         this.timestamp = timestamp;
     }
 
-    public MessageDTO(String senderUsername, String receiverUsername, String content, LocalDateTime timestamp)
-    {
+    public long getSenderID() {
+        return senderID;
+    }
+
+    public void setSenderID(long senderID) {
+        this.senderID = senderID;
+    }
+
+    public long getReceiverID() {
+        return receiverID;
+    }
+
+    public void setReceiverID(long receiverID) {
+        this.receiverID = receiverID;
+    }
+
+    public MessageDTO(String senderUsername, String receiverUsername, String content, LocalDateTime timestamp, long senderID, long receiverID) {
         this.senderUsername = senderUsername;
         this.receiverUsername = receiverUsername;
         this.content = content;
         this.timestamp = timestamp;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
     }
-
-
-
 }
