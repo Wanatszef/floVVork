@@ -43,9 +43,7 @@ public class RestMessageController
                 {
                     List<MessageDTO> messagesDTOList = new ArrayList<>();
                     sentMessages = messageRepository.findAllMessagesBetweenUsers(user, tempMessage.getReceiver());
-                    System.out.println(sentMessages);
                     receivedMessages = messageRepository.findAllMessagesBetweenUsers(user,tempMessage.getSender());
-                    System.out.println(receivedMessages);
                     if(sentMessages!=null && !sentMessages.isEmpty())
                     {
                         for(Message msg: sentMessages)

@@ -82,7 +82,7 @@ nav{
     grid-template-columns: 30% 70%;
     background-color: whitesmoke;
     border-radius: 8px;
-    height: 90%;
+    height: 600px;
     width: 1300px;
 }
 
@@ -122,12 +122,17 @@ nav{
 
 .messageInput
 {
-    display: flexbox;
+    display: grid;
+    grid-template-columns: 80% 20%;
 }
-
-.messageInput .textInput
+.messageInput .button
 {
-    width: 80%;
+    background-color: antiquewhite;
+    width: 100px;
+    height: 40px;
+    border-color: black;
+    border-style: solid;
+
 }
 
 .message
@@ -135,8 +140,6 @@ nav{
     border-style: groove;
     border-color: black;
     width: 100%;
-    padding: 10px;
-
 }
 
 .conversation .message.received {
@@ -158,5 +161,9 @@ nav{
 }
 
 
-
+.textInput {
+    word-break: break-all;
+    width: 600px;
+    resize: none;
+}
 

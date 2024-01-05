@@ -53,11 +53,12 @@
 
             <div class="messageInput" action="/send">
               <form id="messageForm" th:action="@{/message/send}" th:object="${tempMessage}" method="POST">
-                <input type="text" class="textInput" id="messageContent" placeholder="Type your message..." th:field="*{content}">
-                <input type="text" id="senderId" th:field="*{sender}" th:value="${user.getUsername()}">
-                <input type="text" id="receiverId" th:field="*{receiver}">
-                <input type="submit" value="Send">
+                <textarea type="text" class="textInput" id="messageContent" placeholder="Type your message..." th:field="*{content}"></textarea>
+                <input type="hidden" id="senderId" th:field="*{sender}" th:value="${user.getUsername()}">
+                <input type="hidden" id="receiverId" th:field="*{receiver}">
+                <input type="submit" value="Send" class="button">
               </form>
+              <button th:action="@{/sendToSupervisor}" >New Message</button>
             </div>
 
           </div>
