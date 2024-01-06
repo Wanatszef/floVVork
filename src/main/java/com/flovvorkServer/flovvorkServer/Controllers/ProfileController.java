@@ -57,4 +57,18 @@ public class ProfileController
         }
         return "profile";
     }
+
+    @GetMapping("/userEdit")
+    public String editProfile(Authentication authentication, Model model)
+    {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if(user != null)
+        {
+            model.addAttribute("user", user);
+        }
+        else
+            return "accessDenied";
+        return "userEdit";
+    }
 }

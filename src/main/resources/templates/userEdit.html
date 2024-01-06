@@ -36,10 +36,11 @@
       <div class="main-body">
 
         <div class="history_lists">
+          <form id="userForm" action="/saveUserEdit" method="POST" th:object="${user}">
           <img src="avatar.jpg" alt="Avatar">
           <div class="information">
             <a>Name</a>
-            <a th:text="${user.userDetails.getFirstName()}"></a>
+            <input type="text" th:field="*{getUserDetails().getFirstName()}">
           </div>
           <div class="information">
             <a>Second Name</a>
@@ -53,7 +54,8 @@
             <a>Phone Number</a>
             <a th:text="${user.userDetails.getPhoneNumber()}"></a>
           </div>
-            <button onclick="redirect()">Edit</button>
+          </form>
+            <button>Edit</button>
             <button>Logout</button>
         </div>
 
@@ -71,12 +73,6 @@
       </div>
 
     </div>
-   <script>
-        function redirect()
-        {
-          window.location.href = "http://localhost:8080/userEdit";
-        }
-   </script>
   </body>
   </html>
   </span>
