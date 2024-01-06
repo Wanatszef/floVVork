@@ -1,6 +1,8 @@
 package com.flovvorkServer.flovvorkServer.Controllers;
 
+import com.flovvorkServer.flovvorkServer.DTO.MessageDTO;
 import com.flovvorkServer.flovvorkServer.Service.DocumentRepository;
+import com.flovvorkServer.flovvorkServer.Service.MessageRepository;
 import com.flovvorkServer.flovvorkServer.Service.TaskCreatorRepository;
 import com.flovvorkServer.flovvorkServer.Service.UserRepository;
 import com.flovvorkServer.flovvorkServer.entity.Document;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,15 +27,15 @@ public class BasicController
 
     private final TaskCreatorRepository taskCreatorRepository;
 
-    private final MessagesController messagesController;
+    private MessageRepository messageRepository;
 
     @Autowired
-    public BasicController(UserRepository userRepository, DocumentRepository documentRepository, TaskCreatorRepository taskCreatorRepository, MessagesController messagesController)
+    public BasicController(UserRepository userRepository, DocumentRepository documentRepository, TaskCreatorRepository taskCreatorRepository, MessageRepository messageRepository)
     {
         this.documentRepository = documentRepository;
         this.userRepository = userRepository;
         this.taskCreatorRepository = taskCreatorRepository;
-        this.messagesController = messagesController;
+        this.messageRepository = messageRepository;
     }
 
 
@@ -46,8 +49,6 @@ public class BasicController
 
         List<Document> activeDocuments = documentRepository.findDocumentByUserAndActiveIsLike(user,1);
 
-        List<Message> lastMessages = messagesController.getLastMessages(authentication);
-
 
         String tasksCount = String.valueOf(activeDocuments.size());
         if(user != null)
@@ -58,12 +59,15 @@ public class BasicController
                 model.addAttribute("historyDocuments", historyDocuments);
             }
 
-            if(lastMessages != null)
+            List<Message> messageList = messageRepository.findLatestMessagesToReceiver(user);
+            if(!messageList.isEmpty())
             {
-                if (!lastMessages.isEmpty())
+                List<MessageDTO> messageDTOList = new ArrayList<>();
+                for(Message message : messageList)
                 {
-                    model.addAttribute("messages", lastMessages);
+                    messageDTOList.add(new MessageDTO(message.getSender().getUsername(), message.getReceiver().getUsername(), message.getContent(),message.getTimestamp(),message.getSender().getIdUser(),message.getReceiver().getIdUser()));
                 }
+                model.addAttribute("messageList",messageDTOList);
             }
 
             if(!activeDocuments.isEmpty())
@@ -116,6 +120,17 @@ public class BasicController
             {
                 model.addAttribute("availableTasks", availableTasks);
             }
+            List<Message> messageList = messageRepository.findLatestMessagesToReceiver(user);
+            if(!messageList.isEmpty())
+            {
+                List<MessageDTO> messageDTOList = new ArrayList<>();
+                for(Message message : messageList)
+                {
+                    messageDTOList.add(new MessageDTO(message.getSender().getUsername(), message.getReceiver().getUsername(), message.getContent(),message.getTimestamp(),message.getSender().getIdUser(),message.getReceiver().getIdUser()));
+                }
+                model.addAttribute("messageList",messageDTOList);
+            }
+
             return "createTask";
         }
         else

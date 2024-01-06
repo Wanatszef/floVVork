@@ -93,48 +93,14 @@
         </div>
     
         <div class="sidebar">
-          <h4>Messages</h4>
-          
-          <div class="balance">
-            <i class="fas fa-dollar icon"></i>
+          <a th:href="@{/message/getMessages}">Messages</a>
+
+          <div class="balance"th:each="message : ${messageList}">
             <div class="info">
-              <h5>Dollar</h5>
-              <span><i class="fas fa-dollar"></i>25,000.00</span>
+              <h5 th:text="${message.getSenderUsername()}"></h5>
+              <span><i class="" th:text="${message.content}"></i></span>
             </div>
           </div>
-          
-          <div class="balance">
-            <i class="fa-solid fa-rupee-sign icon"></i>
-            <div class="info">
-              <h5>PKR</h5>
-              <span><i class="fa-solid fa-rupee-sign"></i>300,000.00</span>
-            </div>
-          </div>
-    
-          <div class="balance">
-            <i class="fas fa-euro icon"></i>
-            <div class="info">
-              <h5>Euro</h5>
-              <span><i class="fas fa-euro"></i>25,000.00</span>
-            </div>
-          </div>
-    
-          <div class="balance">
-            <i class="fa-solid fa-indian-rupee-sign icon"></i>
-            <div class="info">
-              <h5>INR</h5>
-              <span><i class="fa-solid fa-indian-rupee-sign"></i>220,000.00</span>
-            </div>
-          </div>
-    
-          <div class="balance">
-            <i class="fa-solid fa-sterling-sign icon"></i>
-            <div class="info">
-              <h5>Pound</h5>
-              <span><i class="fa-solid fa-sterling-sign"></i>30,000.00</span>
-            </div>
-          </div>
-    
         </div>
       </div>
     </body>

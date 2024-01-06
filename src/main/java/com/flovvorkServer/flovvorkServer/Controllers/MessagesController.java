@@ -88,31 +88,35 @@ public class MessagesController
         return "messages";
     }
 
-    /*
-    @GetMapping("/message/{messageID}")
-    public List<Message> getMessages(@PathVariable long messageID, Authentication authentication, Model model)
+    @GetMapping("messageCreator")
+    public String messageCreator(Authentication authentication, Model model)
     {
-        List<Message> messages;
-        User user = userRepository.findByUsername(authentication.getName());
-        if(user!=null)
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+
+        if(user != null)
         {
-            Message tempMessage;
-            Optional<Message> message = messageRepository.findById(messageID);
-            if(message.isPresent()) {
-                tempMessage = message.get();
-
-                if(tempMessage.getSender()==user||tempMessage.getReceiver()==user)
-                {
-                    messages = messageRepository.findLatestMessagesBetweenUsers(tempMessage.getSender(),tempMessage.getReceiver());
-                    if(!messages.isEmpty())
-                    {
-                        return messages;
-                    }
-                }
-            }
+            model.addAttribute("user",user);
         }
-        return null;
-    }
+        else
+        {
+            return "accessDenied";
+        }
 
-     */
+        List<User> userList = userRepository.findAll();
+        userList.removeIf(tempUser -> tempUser.getIdUser().equals(user.getIdUser()));
+
+        if(!userList.isEmpty())
+        {
+            model.addAttribute("userList",userList);
+        }
+        else
+        {
+            return "accessDenied";
+        }
+        model.addAttribute("tempMessage", new Message());
+
+        return "messageCreator";
+    }
 }

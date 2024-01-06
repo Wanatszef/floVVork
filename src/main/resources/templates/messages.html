@@ -58,8 +58,9 @@
                 <input type="hidden" id="receiverId" th:field="*{receiver}">
                 <input type="submit" value="Send" class="button">
               </form>
-              <button th:action="@{/sendToSupervisor}" >New Message</button>
+
             </div>
+            <a th:href="@{/message/messageCreator}" >New Message</a>
 
           </div>
 

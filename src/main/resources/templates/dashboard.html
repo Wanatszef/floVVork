@@ -100,16 +100,14 @@
         </div>
     
         <div class="sidebar">
-          <a href="message/getMessages">Messages</a>
-          
-          <div th:each="message : ${messages}" class="balance">
-            <i class="fas fa-dollar icon"></i>
+          <a th:href="@{/message/getMessages}">Messages</a>
+
+          <div class="balance"th:each="message : ${messageList}">
             <div class="info">
-              <h5 th:text="${message.getSender().getUsername()}"></h5>
-              <span><i class="fas fa-dollar" th:text="${#strings.substring(message.getContent(),0,50)}"></i></span>
+              <h5 th:text="${message.getSenderUsername()}"></h5>
+              <span><i class="" th:text="${message.content}"></i></span>
             </div>
           </div>
-    
         </div>
       </div>
       <script>

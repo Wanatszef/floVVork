@@ -104,15 +104,18 @@ nav{
     width: 800px;
 }
 
-.history_lists img
-{
-    border-radius: 50%;
-    width: 200;
-    height: 200;
-    margin-left: 38%;
+.messageForm {
+    display: flex;
+    flex-direction: column;
 }
 
+.textInput
+{
+    height: 300px;
+    resize: none;
+}
 
+/* Sidebar Section */
 .sidebar{
     border-radius: 8px;
     width: 15%;

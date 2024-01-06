@@ -1,0 +1,104 @@
+<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+  <html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FloVVork | New Message</title>
+    <link rel="stylesheet" th:href="@{/messageCreatorStyles.css}" />
+      <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <a href="/">FloVVork</a>
+      </div>
+
+      <div class="header-icons">
+        <div class="account">
+          <img src="./pic/img.jpg" alt="">
+          <h4><span th:text="${user.getUsername()}"></span></h4>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <nav>
+        <div class="side_navbar">
+          <span>Main Menu</span>
+          <a href="/">Dashboard</a>
+          <a href="profile" class="active">Profile</a>
+          <a href="tasks">My tasks</a>
+          <a href="createTask" >Create Task</a>
+          <a href="#" style="color: red;">Logout</a>
+
+        </div>
+      </nav>
+
+      <div class="main-body">
+
+        <div class="history_lists">
+            <form th:action="@{/message/send}" method="POST" th:object="${tempMessage}" class="messageForm">
+
+                <label for="userSelect">Select recipient:</label>
+
+                   <select id="userSelect" name="userSelect" th:field="*{receiver}">
+                    <option th:each="recipient : ${userList}" th:value="${recipient.getIdUser()}" th:text="${recipient.getUsername()}"></option>
+                   </select>
+
+                 <textarea type="text" class="textInput" id="messageContent" placeholder="Type your message..." th:field="*{content}"></textarea>
+
+
+
+                <input type="submit" value="Send">
+                </form>
+        </div>
+
+
+
+      </div>
+
+      <div class="sidebar">
+        <h4>Messages</h4>
+
+        <div class="balance">
+          <div class="info">
+            <h5>Dollar</h5>
+            <span><i class="fas fa-dollar"></i>25,000.00</span>
+          </div>
+        </div>
+
+        <div class="balance">
+          <div class="info">
+            <h5>PKR</h5>
+            <span><i class="fa-solid fa-rupee-sign"></i>300,000.00</span>
+          </div>
+        </div>
+
+        <div class="balance">
+
+          <div class="info">
+            <h5>Euro</h5>
+            <span><i class="fas fa-euro"></i>25,000.00</span>
+          </div>
+        </div>
+
+        <div class="balance">
+
+          <div class="info">
+            <h5>INR</h5>
+            <span><i class="fa-solid fa-indian-rupee-sign"></i>220,000.00</span>
+          </div>
+        </div>
+
+        <div class="balance">
+          <div class="info">
+            <h5>Pound</h5>
+            <span><i class="fa-solid fa-sterling-sign"></i>30,000.00</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+  </html>
+  </span>
