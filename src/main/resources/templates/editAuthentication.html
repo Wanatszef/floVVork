@@ -36,30 +36,29 @@
       <div class="main-body">
 
         <div class="history_lists">
-          <form id="userForm" th:action="@{/saveProfileEdit}" method="POST" th:object="${userDetails}">
+          <form id="userForm" th:action="@{/saveDetailsEdit}" method="POST" th:object="${user}">
           <img src="avatar.jpg" alt="Avatar">
           <div class="information">
-            <input type="hidden" th:field="*{userDetailsID}">
-            <input type="hidden" th:field="*{roleID.roleID}">
-            <a>Name</a>
-            <input type="text" th:field="*{firstName}">
+            <input type="hidden" th:field="*{idUser}">
+            <input type="hidden" th:field="*{userDetails.userDetailsID}">
+            <a>Username</a>
+            <input type="text" th:field="*{username}">
           </div>
           <div class="information">
-            <a>Second Name</a>
-            <input type="text" th:field="*{secondName}">
+            <a>Password</a>
+            <input type="password" id="currentPassword" name="currentPassword" required>
           </div>
           <div class="information">
-            <a>Email</a>
-            <input type="email" th:field="*{email}">
+           <label for="newPassword">New password:</label>
+           <input type="password" id="newPassword" name="newPassword" th:field="*{password}" >
           </div>
           <div class="information">
-            <a>Phone Number</a>
-            <input type="tel" th:field="*{phoneNumber}">
+             <label for="confirmNewPassword">Confirm new password:</label>
+             <input type="password" id="confirmNewPassword" name="confirmNewPassword" >
           </div>
             <div class="buttons">
               <input type="submit" value="save">
               <button onclick="redirect()">Cancel</button>
-              <button onclick="editAuthentication()">Edit Authentication</button>
             </div>
           </form>
           </div>
@@ -81,11 +80,8 @@
   <script>
     function redirect()
     {
-     window.location.href = "http://localhost:8080/profile";
+      window.location.href = "http://localhost:8080/profile";
     }
-
-  </script>
-  <script>
     function editAuthentication()
     {
       window.location.href="http://localhost:8080/editAuthentication";
