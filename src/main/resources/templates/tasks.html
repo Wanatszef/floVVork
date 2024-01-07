@@ -60,7 +60,7 @@
                    <td th:text="${document.getTitle()}"></td>
                    <td th:text="${document.getExpireDate()}"></td>
                    <td>
-                   <a th:href="@{/${document.getDocumentName()}/{documentId}(documentId=${document.getDocument_id()})}">Open</a>
+                   <a th:href="@{'/' + ${document.getDocumentName()} + '/' + ${document.getDocument_id()}}">Open</a>
                    </td>
                  </tr>
                 </tbody>

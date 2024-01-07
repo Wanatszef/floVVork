@@ -80,7 +80,7 @@ public class AddUserController
             document = new Document();
             System.out.println("aaaaa");
             document.setUser(user);
-            document.setDocumentName("newUser/newUser");
+            document.setDocumentName("savedUser");
             document.setActive(1);
             document.setTitle("new user request");
             document.setDocumentValues(documentValues);
