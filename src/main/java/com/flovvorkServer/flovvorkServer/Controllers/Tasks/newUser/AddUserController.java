@@ -2,38 +2,43 @@ package com.flovvorkServer.flovvorkServer.Controllers.Tasks.newUser;
 
 import com.flovvorkServer.flovvorkServer.Service.*;
 import com.flovvorkServer.flovvorkServer.entity.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.time.LocalDate;
 
 @Controller
 public class AddUserController
 {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    DocumentRepository documentRepository;
+    private final DocumentRepository documentRepository;
 
-    DocumentValuesRepository documentValuesRepository;
+    private final DocumentValuesRepository documentValuesRepository;
 
-    TaskCreatorRepository taskCreatorRepository;
+    private final TaskCreatorRepository taskCreatorRepository;
 
-    TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
+    private final RoleRepository roleRepository;
 
 
     @Autowired
-    public AddUserController(TaskCreatorRepository taskCreatorRepository, UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository, TaskRepository taskRepository)
+    public AddUserController(TaskCreatorRepository taskCreatorRepository, UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository, TaskRepository taskRepository, UserDetailsRepository userDetailsRepository, RoleRepository roleRepository)
     {
         this.taskCreatorRepository = taskCreatorRepository;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.documentValuesRepository = documentValuesRepository;
         this.taskRepository = taskRepository;
+        this.userDetailsRepository = userDetailsRepository;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("newUser")
@@ -51,6 +56,8 @@ public class AddUserController
 
         User user = userRepository.findByUsername(username);
 
+        model.addAttribute("user",user);
+
         if(user == null)
         {
             return "accessDenied";
@@ -58,69 +65,45 @@ public class AddUserController
 
         else
         {
-            model.addAttribute(user);
             return "newUser/newUser";
         }
     }
 
     @PostMapping("saveUserEdit")
-    public String saveUserCreation(Authentication authentication, Model model, DocumentValues values, Document document, @RequestParam int documentID) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+    @Transactional
+    public String saveUserCreation(Authentication authentication, @RequestParam("documentID") Long documentID, @ModelAttribute("values") DocumentValues documentValues) {
 
-        if (user != null) {
-            if (documentID != 0)
-            {
-                Document existingDocument = documentRepository.findByDocumentId(Integer.toUnsignedLong(documentID));
-                if (existingDocument != null)
-                {
-                    if(existingDocument.getUser() == user)
-                    {
-                        existingDocument.setDocumentValues(values);
-                        documentValuesRepository.save(values);
-                        documentRepository.save(existingDocument);
-                        return "redirect:http://localhost:8080";
-                    }
-                    else
-                    {
-                        return "accessDenied";
-                    }
-                }
-            }
-            else
-            {
-                Task task = taskRepository.findByIdTask(1);
-                if(task != null)
-                {
-                    TaskAccess taskAccess = taskCreatorRepository.findByTaskAndUserId(task,user);
-                    if(taskAccess != null)
-                    {
-                        System.out.println("creating new document");
-                        document.setDocumentValues(values);
-                        document.setDocumentName("newUser/newUser");
-                        document.setActive(1);
-                        document.setCreateDate(LocalDate.now());
-                        document.setTitle("New user draft");
-                        document.setUpdateDate(LocalDate.now());
-                        model.addAttribute("user", user);
-                        document.setUser(user);
-                        document.setPreviousUser(user);
+        User user = userRepository.findByUsername(authentication.getName());
+        Document document = documentRepository.findByDocumentId(documentID);
+        if(document == null)
+        {
+            document = new Document();
+            System.out.println("aaaaa");
+            document.setUser(user);
+            document.setDocumentName("newUser/newUser");
+            document.setActive(1);
+            document.setTitle("new user request");
+            document.setDocumentValues(documentValues);
+            document.setPreviousUser(user);
+            document.setExpireDate(LocalDate.now().plusMonths(1));
+            document.setCreateDate(LocalDate.now());
+            document.setUpdateDate(LocalDate.now());
+            documentValuesRepository.save(documentValues);
+            documentRepository.save(document);
 
-                        documentValuesRepository.save(values);
-                        documentRepository.save(document);
-
-                        return "redirect:http://localhost:8080";
-                    }
-                    else
-                    {
-                        return "accessDenied";
-                    }
-                }
-                else return "accessDenied";
-            }
+        }
+        else
+        {
+            document.setUpdateDate(LocalDate.now());
+            document.setExpireDate(LocalDate.now().plusMonths(1));
+            documentRepository.save(document);
+                int pastID = document.getDocumentValues().getDocumentValuesId();
+            documentValuesRepository.deleteByDocumentValuesId(pastID);
+            document.setDocumentValues(documentValues);
+            documentValuesRepository.save(documentValues);
         }
 
-        return "redirect:http://localhost:8080";
+        return "redirect:/";
     }
 
 
@@ -152,6 +135,37 @@ public class AddUserController
             return "accessDenied";
         }
 
+    }
+
+    @PostMapping("/sendToSupervisor")
+    public String userApprove(@RequestParam("documentID") Long documentID, @ModelAttribute("values") DocumentValues documentValues) {
+
+        Document document = documentRepository.findByDocumentId(documentID);
+        document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+        System.out.println("userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2)))");
+        document.setTitle("new user approve");
+        document.setDocumentName("userApproval");
+        documentRepository.save(document);
+        return "redirect:/";
+    }
+
+    @GetMapping("/userApproval/{documentId}")
+    public String approval(Authentication authentication, Model model, @PathVariable Long documentId)
+    {
+        User user = userRepository.findByUsername(authentication.getName());
+        Document document = documentRepository.findByDocumentId(documentId);
+        if(user!= null)
+        {
+            if(document.getUser().getIdUser().equals(user.getIdUser()))
+            {
+                model.addAttribute("document",document);
+                DocumentValues documentValues = document.getDocumentValues();
+                model.addAttribute("documentValues",documentValues);
+                return "newUser/userApproval";
+            }
+
+        }
+        return "accessDenied";
     }
 
 }

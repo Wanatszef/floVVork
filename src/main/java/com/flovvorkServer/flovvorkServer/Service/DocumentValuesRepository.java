@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocumentValuesRepository extends JpaRepository<DocumentValues, Integer>
 {
-
+ void deleteByDocumentValuesId(int documentValuesId);
 }

@@ -28,7 +28,6 @@
           <div class="basicInfo">
             <div class="personals">
               <a>Email</a>
-                <a th:text="${document.getDocument_id()}"></a>
               <input type="email" placeholder="email" th:field="*{text1}">
             </div>
             <div class="personals">
@@ -57,14 +56,26 @@
             </div>
           </div>
           <div class="save">
-            <button type="submit" form="userForm"> Save </button>
+            <button type="submit" form="userForm" onclick="setSaveAction()"> Save </button>
           </div>
           <div class="send">
-            <button  form="userForm"  th:action="@{/sendToSupervisor}" >Send to supervisor</button>
+            <button  type="submit" form="userForm" onclick="sendToSupervisor()">Send to supervisor</button>
           </div>
 
       </div>
     </form>
+    <script>
+        function setSaveAction() {
+            var form = document.getElementById('userForm');
+                form.action = '/saveUserEdit';
+        }
+
+        function sendToSupervisor()
+        {
+            var form = document.getElementById('userForm');
+            form.action = '/sendToSupervisor';
+        }
+    </script>
     </body>
 </html>
     </span>
