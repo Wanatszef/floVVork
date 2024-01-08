@@ -28,42 +28,78 @@
           <div class="basicInfo">
             <div class="personals">
               <a>Email</a>
-              <input type="email" placeholder="email" th:field="*{text1}">
+              <input type="email" placeholder="email" th:field="*{text1}" readonly>
             </div>
             <div class="personals">
               <a>Name</a>
-              <input type="text" placeholder="Name" th:field="*{text2}">
+              <input type="text" placeholder="Name" th:field="*{text2}" readonly>
             </div>
             <div class="personals">
               <a>Second Name</a>
-              <input type="text" placeholder="Second Name" th:field="*{text3}">
+              <input type="text" placeholder="Second Name" th:field="*{text3}" readonly>
             </div>
             <div class="personals">
               <a>Phone Number</a>
-              <input type="tel" th:field="*{number1}">
+              <input type="tel" th:field="*{number1}" readonly>
             </div>
+              <div class="personals">
+              <a>Role </a>
+              <select name="roleId" required>
+                  <option th:each="role : ${roles}" th:value="${role.roleID}" th:text="${role.name}" th:field="*{number3}"></option>
+              </select>
+            </div>
+
           </div>
           <div class="additional">
             <div class="attachment">
               <a>attachment</a>
-              <input type="file">
+              <input type="file" disabled>
             </div>
-            <div class="comment" th:field="*{number2}">
+            <div class="comment" th:field="*{text7}">
               <a>Comment</a>
               <textarea>
 
               </textarea>
             </div>
           </div>
-          <div class="save">
-            <button type="submit" form="userForm"> Save </button>
+          <div class="leftButtons">
+              <button type="submit" form="userForm" onclick="save()"> Save </button>
+              <button type="submit" form="userForm" onclick="sendBackToCreator()">Send back to creator</button>
           </div>
-          <div class="send">
-            <button  form="userForm"  th:action="@{/sendToSupervisor}" >Send to supervisor</button>
+          <div class="rightButtons">
+              <button  type="submit" form="userForm" onclick="decline()">Decline</button>
+              <button type="submit" form="userForm" onclick="accept()">Accept </button>
           </div>
 
       </div>
     </form>
+
+
+    <script>
+        function accept() {
+            var form = document.getElementById('userForm');
+            form.action = '/userApproval/accept';
+        }
+
+        function decline()
+        {
+            var form = document.getElementById('userForm');
+            form.action = '/userApproval/decline';
+        }
+
+        function save()
+        {
+            window.location.href = "http://localhost:8080/" ;
+        }
+
+        function sendBackToCreator()
+        {
+            var form = document.getElementById('userForm');
+            form.action = '/userApproval/sendBack';
+        }
+
+
+    </script>
     </body>
 </html>
     </span>

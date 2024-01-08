@@ -118,3 +118,44 @@ body{
     border-radius: 5px;
     cursor: pointer;
 }
+
+
+.leftButtons
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    grid-row: span 1;
+    grid-column: span 1;
+}
+
+.rightButtons
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    grid-row: span 1;
+    grid-column: span 1;
+}
+
+.leftButtons button
+{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: wheat;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.rightButtons button
+{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: rgb(195, 178, 153);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

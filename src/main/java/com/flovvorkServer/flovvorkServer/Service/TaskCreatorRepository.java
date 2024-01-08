@@ -13,4 +13,6 @@ public interface TaskCreatorRepository extends JpaRepository<TaskAccess, Integer
     List<TaskAccess> findDistinctByUserId(User user);
 
     TaskAccess findByTaskAndUserId(Task task, User userId);
+
+    TaskAccess findByUserIdAndTask(User user, Task task);
 }

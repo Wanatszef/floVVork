@@ -2,6 +2,8 @@ package com.flovvorkServer.flovvorkServer.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "document_values")
 @SequenceGenerator(name = "document_values_seq", sequenceName = "document_values_seq", allocationSize = 1)
@@ -57,6 +59,26 @@ public class DocumentValues
     @Column(name = "number7")
     private Integer number7;
 
+    @Column(name = "number8")
+    private Integer number8;
+
+    @Column(name = "number9")
+    private Integer number9;
+
+    @Column(name = "number10")
+    private Integer number10;
+
+    @Column(name = "date1")
+    private LocalDate date1;
+
+    @Column(name = "date2")
+    private LocalDate date2;
+    @Column(name = "date3")
+    private LocalDate date3;
+    @Column(name = "date4")
+    private LocalDate date4;
+    @Column(name = "date5")
+    private LocalDate date5;
     public DocumentValues()
     {
         documentValuesId = 0;
@@ -213,6 +235,98 @@ public class DocumentValues
         this.number7 = number7;
     }
 
+    public void setNumber1(Integer number1) {
+        this.number1 = number1;
+    }
+
+    public void setNumber2(Integer number2) {
+        this.number2 = number2;
+    }
+
+    public void setNumber3(Integer number3) {
+        this.number3 = number3;
+    }
+
+    public void setNumber4(Integer number4) {
+        this.number4 = number4;
+    }
+
+    public void setNumber5(Integer number5) {
+        this.number5 = number5;
+    }
+
+    public void setNumber6(Integer number6) {
+        this.number6 = number6;
+    }
+
+    public void setNumber7(Integer number7) {
+        this.number7 = number7;
+    }
+
+    public Integer getNumber8() {
+        return number8;
+    }
+
+    public void setNumber8(Integer number8) {
+        this.number8 = number8;
+    }
+
+    public Integer getNumber9() {
+        return number9;
+    }
+
+    public void setNumber9(Integer number9) {
+        this.number9 = number9;
+    }
+
+    public Integer getNumber10() {
+        return number10;
+    }
+
+    public void setNumber10(Integer number10) {
+        this.number10 = number10;
+    }
+
+    public LocalDate getDate1() {
+        return date1;
+    }
+
+    public void setDate1(LocalDate date1) {
+        this.date1 = date1;
+    }
+
+    public LocalDate getDate2() {
+        return date2;
+    }
+
+    public void setDate2(LocalDate date2) {
+        this.date2 = date2;
+    }
+
+    public LocalDate getDate3() {
+        return date3;
+    }
+
+    public void setDate3(LocalDate date3) {
+        this.date3 = date3;
+    }
+
+    public LocalDate getDate4() {
+        return date4;
+    }
+
+    public void setDate4(LocalDate date4) {
+        this.date4 = date4;
+    }
+
+    public LocalDate getDate5() {
+        return date5;
+    }
+
+    public void setDate5(LocalDate date5) {
+        this.date5 = date5;
+    }
+
     @Override
     public String toString() {
         return "DocumentValues{" +
@@ -234,10 +348,19 @@ public class DocumentValues
                 ", number5=" + number5 +
                 ", number6=" + number6 +
                 ", number7=" + number7 +
+                ", number8=" + number8 +
+                ", number9=" + number9 +
+                ", number10=" + number10 +
+                ", date1=" + date1 +
+                ", date2=" + date2 +
+                ", date3=" + date3 +
+                ", date4=" + date4 +
+                ", date5=" + date5 +
                 '}';
     }
 
-    public DocumentValues(String text1, String text2, String text3, String text4, String text5, String text6, String text9, String text7, String text8, String text10, int number1, int number2, int number3, int number4, int number5, int number6, int number7) {
+    public DocumentValues(int documentValuesId, String text1, String text2, String text3, String text4, String text5, String text6, String text9, String text7, String text8, String text10, Integer number1, Integer number2, Integer number3, Integer number4, Integer number5, Integer number6, Integer number7, Integer number8, Integer number9, Integer number10, LocalDate date1, LocalDate date2, LocalDate date3, LocalDate date4, LocalDate date5) {
+        this.documentValuesId = documentValuesId;
         this.text1 = text1;
         this.text2 = text2;
         this.text3 = text3;
@@ -255,5 +378,13 @@ public class DocumentValues
         this.number5 = number5;
         this.number6 = number6;
         this.number7 = number7;
+        this.number8 = number8;
+        this.number9 = number9;
+        this.number10 = number10;
+        this.date1 = date1;
+        this.date2 = date2;
+        this.date3 = date3;
+        this.date4 = date4;
+        this.date5 = date5;
     }
 }
