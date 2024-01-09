@@ -1,10 +1,12 @@
-package com.flovvorkServer.flovvorkServer.Controllers.Tasks.purchaseInvoice;
+package com.flovvorkServer.flovvorkServer.Controllers.Tasks.salesInvoice;
 
 import com.flovvorkServer.flovvorkServer.Service.*;
-import com.flovvorkServer.flovvorkServer.entity.*;
+import com.flovvorkServer.flovvorkServer.entity.Document;
+import com.flovvorkServer.flovvorkServer.entity.DocumentValues;
+import com.flovvorkServer.flovvorkServer.entity.Role;
+import com.flovvorkServer.flovvorkServer.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +15,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("purchaseInvoice")
-public class purchaseInvoiceController
+@RequestMapping("salesInvoice")
+public class salesInvoiceController
 {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
@@ -26,7 +28,7 @@ public class purchaseInvoiceController
     private final TaskRepository taskRepository;
 
 
-    public purchaseInvoiceController(UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository, UserDetailsRepository userDetailsRepository, RoleRepository roleRepository, TaskCreatorRepository taskCreatorRepository, TaskRepository taskRepository) {
+    public salesInvoiceController(UserRepository userRepository, DocumentRepository documentRepository, DocumentValuesRepository documentValuesRepository, UserDetailsRepository userDetailsRepository, RoleRepository roleRepository, TaskCreatorRepository taskCreatorRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.documentValuesRepository = documentValuesRepository;
@@ -36,7 +38,7 @@ public class purchaseInvoiceController
         this.taskRepository = taskRepository;
     }
 
-    @GetMapping("/newPurchaseInvoice")
+    @GetMapping("/newSalesInvoice")
     public String addPurchaseInvoice(Authentication authentication, Model model)
     {
         User user = userRepository.findByUsername(authentication.getName());
@@ -52,7 +54,7 @@ public class purchaseInvoiceController
 
             model.addAttribute("user",user);
 
-            return "purchaseInvoice/purchaseInvoice";
+            return "salesInvoice/salesInvoice";
         }
         else
             return "accessDenied";
@@ -60,7 +62,7 @@ public class purchaseInvoiceController
 
     }
 
-    @PostMapping("savePurchaseInvoice")
+    @PostMapping("saveSalesInvoice")
     @Transactional
     public String saveUserCreation(Authentication authentication, @RequestParam("documentID") Long documentID, @ModelAttribute("values") DocumentValues documentValues) {
 
@@ -69,11 +71,11 @@ public class purchaseInvoiceController
         if(document == null)
         {
             document = new Document();
-            System.out.println("savingPurchaseInvoice");
+            System.out.println("savingSalesInvoice");
             document.setUser(user);
-            document.setDocumentName("purchaseInvoice/savedPurchaseInvoice");
+            document.setDocumentName("SalesInvoice/savedSalesInvoice");
             document.setActive(1);
-            document.setTitle("saved Purchase Invoice " + documentValues.getText2());
+            document.setTitle("saved Sales Invoice " + documentValues.getText2());
             document.setDocumentValues(documentValues);
             document.setPreviousUser(user);
             document.setExpireDate(LocalDate.now().plusMonths(1));
@@ -97,7 +99,7 @@ public class purchaseInvoiceController
         return "redirect:/";
     }
 
-    @GetMapping("savedPurchaseInvoice/{documentId}")
+    @GetMapping("savedSalesInvoice/{documentId}")
     public String openSaved(@PathVariable Long documentId, Authentication authentication, Model model)
     {
 
@@ -117,7 +119,7 @@ public class purchaseInvoiceController
 
             model.addAttribute("user",user);
 
-            return "purchaseInvoice/purchaseInvoice";
+            return "salesInvoice/salesInvoice";
         }
         else
         {
@@ -134,8 +136,8 @@ public class purchaseInvoiceController
         if(document != null)
         {
             document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
-            document.setTitle("new purchase invoice approve");
-            document.setDocumentName("purchaseInvoice/purchaseInvoiceApproval");
+            document.setTitle("new sales invoice approve");
+            document.setDocumentName("salesInvoice/salesInvoiceApproval");
             document.setDocumentValues(documentValues);
             documentRepository.save(document);
             return "redirect:/";
@@ -144,9 +146,9 @@ public class purchaseInvoiceController
         {
             document = new Document();
             document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
-            document.setDocumentName("purchaseInvoice/purchaseInvoiceApproval");
+            document.setDocumentName("salesInvoice/salesInvoiceApproval");
             document.setActive(1);
-            document.setTitle("purchaseInvoiceApproval");
+            document.setTitle("salesInvoiceApproval");
             document.setDocumentValues(documentValues);
             document.setPreviousUser(user);
             document.setExpireDate(LocalDate.now().plusMonths(1));
@@ -158,7 +160,7 @@ public class purchaseInvoiceController
         }
     }
 
-    @GetMapping("/purchaseInvoiceApproval/{documentId}")
+    @GetMapping("/salesInvoiceApproval/{documentId}")
     public String approval(Authentication authentication, Model model, @PathVariable Long documentId)
     {
         User user = userRepository.findByUsername(authentication.getName());
@@ -173,7 +175,7 @@ public class purchaseInvoiceController
                 model.addAttribute("document",document);
                 DocumentValues documentValues = document.getDocumentValues();
                 model.addAttribute("documentValues",documentValues);
-                return "purchaseInvoice/purchaseInvoiceApproval";
+                return "salesInvoice/salesInvoiceApproval";
             }
 
         }
@@ -204,10 +206,9 @@ public class purchaseInvoiceController
         Document document = documentRepository.findByDocumentId(documentID);
         document.setUser(document.getPreviousUser());
         document.setTitle("returned invoice document");
-        document.setDocumentName("purchaseInvoice/savedPurchaseInvoice");
+        document.setDocumentName("salesInvoice/savedSalesInvoice");
         documentRepository.save(document);
         return "redirect:/";
 
     }
-
 }

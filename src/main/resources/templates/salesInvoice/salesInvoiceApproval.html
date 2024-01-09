@@ -28,19 +28,19 @@
           <div class="basicInfo">
             <div class="personals">
               <a>Producer</a>
-              <input type="text" placeholder="Producer" th:field="*{text1}">
+              <input type="text" placeholder="Producer" th:field="*{text1}" readonly>
             </div>
             <div class="personals">
               <a>Name</a>
-              <input type="text" placeholder="Name" th:field="*{text2}">
+              <input type="text" placeholder="Name" th:field="*{text2}" readonly>
             </div>
               <div class="personals">
               <a>Price</a>
-              <input type="number" th:field="*{number3}" id="price">
+              <input type="number" th:field="*{number3}" readonly>
             </div>
             <div class="personals">
               <a>Amount</a>
-              <input type="number"  th:field="*{number1}" id="amount">
+              <input type="text" th:field="*{number1}" readonly>
             </div>
               <div class="personals">
               <a>Total price</a>
@@ -48,7 +48,7 @@
             </div>
             <div class="personals">
               <a>Purchase Date</a>
-              <input type="date" th:field="*{date1}">
+              <input type="date" th:field="*{date1}" readonly>
             </div>
           </div>
           <div class="additional">
@@ -63,41 +63,43 @@
               </textarea>
             </div>
           </div>
-          <div class="save">
-            <button type="submit" form="purchaseInvoiceForm" onclick="setSaveAction()"> Save </button>
+          <div class="leftButtons">
+              <button type="submit" form="purchaseInvoiceForm" onclick="save()"> Save </button>
+              <button type="submit" form="purchaseInvoiceForm" onclick="sendBackToCreator()">Send back to creator</button>
           </div>
-          <div class="send">
-            <button  type="submit" form="purchaseInvoiceForm" onclick="sendToSupervisor()">Send to supervisor</button>
+          <div class="rightButtons">
+              <button  type="submit" form="purchaseInvoiceForm" onclick="decline()">Decline</button>
+              <button type="submit" form="purchaseInvoiceForm" onclick="accept()">Accept </button>
           </div>
 
       </div>
     </form>
+
+
     <script>
-        function setSaveAction() {
+        function accept() {
             var form = document.getElementById('purchaseInvoiceForm');
-            form.action = '/purchaseInvoice/savePurchaseInvoice';
+            form.action = '/purchaseInvoice/accept';
         }
 
-        function sendToSupervisor()
+        function decline()
         {
             var form = document.getElementById('purchaseInvoiceForm');
-            form.action = '/purchaseInvoice/sendToSupervisor';
+            form.action = '/purchaseInvoice/decline';
         }
 
-        function updateResult() {
-            var input1Value = document.getElementById('price').value;
-            var input2Value = document.getElementById('amount').value;
-
-
-            if (!isNaN(input1Value) && !isNaN(input2Value)) {
-                var result = input1Value * input2Value;
-                document.getElementById('result').value = result;
-            } else {
-                document.getElementById('result').value = '';
-            }
+        function save()
+        {
+            window.location.href = "http://localhost:8080/" ;
         }
-        document.getElementById('price').addEventListener('input', updateResult);
-        document.getElementById('amount').addEventListener('input', updateResult);
+
+        function sendBackToCreator()
+        {
+            var form = document.getElementById('purchaseInvoiceForm');
+            form.action = '/purchaseInvoice/sendBack';
+        }
+
+
     </script>
     </body>
 </html>
