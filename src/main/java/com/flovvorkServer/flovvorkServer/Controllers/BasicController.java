@@ -59,9 +59,21 @@ public class BasicController
                 model.addAttribute("historyDocuments", historyDocuments);
             }
 
-            List<Message> messageList = messageRepository.findLatestMessagesToReceiver(user);
+
+            List<User> others = userRepository.findAll();
+            List<Message> messageList = new ArrayList<>();
+            for(User tempUser : others)
+            {
+                Message tempMessage = messageRepository.findLatestMessageBetweenUsers(user,tempUser);
+                if(tempMessage != null) {
+                    messageList.add(tempMessage);
+                }
+            }
+
+
             if(!messageList.isEmpty())
             {
+
                 List<MessageDTO> messageDTOList = new ArrayList<>();
                 for(Message message : messageList)
                 {
@@ -120,9 +132,20 @@ public class BasicController
             {
                 model.addAttribute("availableTasks", availableTasks);
             }
-            List<Message> messageList = messageRepository.findLatestMessagesToReceiver(user);
+            List<User> others = userRepository.findAll();
+            List<Message> messageList = new ArrayList<>();
+            for(User tempUser : others)
+            {
+                Message tempMessage = messageRepository.findLatestMessageBetweenUsers(user,tempUser);
+                if(tempMessage != null) {
+                    messageList.add(tempMessage);
+                }
+            }
+
+
             if(!messageList.isEmpty())
             {
+
                 List<MessageDTO> messageDTOList = new ArrayList<>();
                 for(Message message : messageList)
                 {

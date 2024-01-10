@@ -89,13 +89,13 @@
     </form>
     <script>
         function setSaveAction() {
-            var form = document.getElementById('purchaseInvoiceForm');
+            var form = document.getElementById('salesInvoiceForm');
             form.action = '/salesInvoice/saveSalesInvoice';
         }
 
         function sendToSupervisor()
         {
-            var form = document.getElementById('purchaseInvoiceForm');
+            var form = document.getElementById('salesInvoiceForm');
             form.action = '/salesInvoice/sendToSupervisor';
         }
 

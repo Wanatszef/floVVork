@@ -73,7 +73,7 @@ public class salesInvoiceController
             document = new Document();
             System.out.println("savingSalesInvoice");
             document.setUser(user);
-            document.setDocumentName("SalesInvoice/savedSalesInvoice");
+            document.setDocumentName("salesInvoice/savedSalesInvoice");
             document.setActive(1);
             document.setTitle("saved Sales Invoice " + documentValues.getText2());
             document.setDocumentValues(documentValues);

@@ -49,13 +49,26 @@ public class ProfileController {
         } else
             return "accessDenied";
 
-        List<Message> messageList = messageRepository.findLatestMessagesToReceiver(user);
-        if (!messageList.isEmpty()) {
-            List<MessageDTO> messageDTOList = new ArrayList<>();
-            for (Message message : messageList) {
-                messageDTOList.add(new MessageDTO(message.getSender().getUsername(), message.getReceiver().getUsername(), message.getContent(), message.getTimestamp(), message.getSender().getIdUser(), message.getReceiver().getIdUser()));
+        List<User> others = userRepository.findAll();
+        List<Message> messageList = new ArrayList<>();
+        for(User tempUser : others)
+        {
+            Message tempMessage = messageRepository.findLatestMessageBetweenUsers(user,tempUser);
+            if(tempMessage != null) {
+                messageList.add(tempMessage);
             }
-            model.addAttribute("messageList", messageDTOList);
+        }
+
+
+        if(!messageList.isEmpty())
+        {
+
+            List<MessageDTO> messageDTOList = new ArrayList<>();
+            for(Message message : messageList)
+            {
+                messageDTOList.add(new MessageDTO(message.getSender().getUsername(), message.getReceiver().getUsername(), message.getContent(),message.getTimestamp(),message.getSender().getIdUser(),message.getReceiver().getIdUser()));
+            }
+            model.addAttribute("messageList",messageDTOList);
         }
         return "profile";
     }

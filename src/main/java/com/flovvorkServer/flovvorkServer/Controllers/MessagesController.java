@@ -73,15 +73,11 @@ public class MessagesController
                     Message latestMessage = messageRepository.findLatestMessageBetweenUsers(user, tempUser);
                     if (latestMessage != null) {
                         messages.add(latestMessage);
+                        model.addAttribute("messages",messages);
                     }
                 }
             }
 
-            if (!messages.isEmpty()) {
-                model.addAttribute("messages", messages);
-            } else {
-                return "accessDenied";
-            }
         }
 
 
