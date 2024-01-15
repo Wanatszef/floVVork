@@ -47,6 +47,8 @@ public class AddUserController
     @GetMapping("newUser")
     public String AddUserStart(Authentication authentication, Model model)
     {
+
+        
         Document document = new Document();
 
         DocumentValues values = new DocumentValues();
@@ -58,6 +60,16 @@ public class AddUserController
         model.addAttribute("values",values);
 
         User user = userRepository.findByUsername(username);
+
+        List<User> users = userRepository.findAll();
+
+        users.removeIf(tempUser -> tempUser.getIdUser().equals(user.getIdUser()));
+
+        List<Role> roles = roleRepository.findAll();
+
+        model.addAttribute("roles",roles);
+
+        model.addAttribute("users",users);
 
         model.addAttribute("user",user);
 
@@ -81,7 +93,6 @@ public class AddUserController
         if(document == null)
         {
             document = new Document();
-            System.out.println("aaaaa");
             document.setUser(user);
             document.setDocumentName("savedUser");
             document.setActive(1);
@@ -125,8 +136,19 @@ public class AddUserController
 
         User user = userRepository.findByUsername(username);
 
+
         if(document.getUser() == user)
         {
+            List<User> users = userRepository.findAll();
+
+            users.removeIf(tempUser -> tempUser.getIdUser().equals(user.getIdUser()));
+
+            List<Role> roles = roleRepository.findAll();
+
+            model.addAttribute("roles",roles);
+
+            model.addAttribute("users",users);
+
             model.addAttribute("document", document);
 
             model.addAttribute("values",documentValues);
@@ -149,7 +171,7 @@ public class AddUserController
         Document document = documentRepository.findByDocumentId(documentID);
         if(document != null)
         {
-        document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+        document.setUser(userRepository.findByIdUser(Integer.toUnsignedLong(documentValues.getNumber9())));
         document.setTitle("new user approve");
         document.setDocumentName("userApproval");
         document.setDocumentValues(documentValues);
@@ -159,7 +181,7 @@ public class AddUserController
         else
         {
             document = new Document();
-            document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+            document.setUser(userRepository.findByIdUser(Integer.toUnsignedLong(documentValues.getNumber9())));
             document.setDocumentName("userApproval");
             document.setActive(1);
             document.setTitle("new user approve");

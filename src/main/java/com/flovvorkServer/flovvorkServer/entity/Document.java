@@ -1,6 +1,8 @@
 package com.flovvorkServer.flovvorkServer.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
@@ -13,7 +15,6 @@ public class Document
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
     private long documentId;
-
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")

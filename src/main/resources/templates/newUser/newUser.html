@@ -42,6 +42,20 @@
               <a>Phone Number</a>
               <input type="tel" th:field="*{number1}">
             </div>
+              <input type="hidden" name="number9" id="number9" th:field="*{number9}" >
+              <div class="personals">
+                  <a>Recipient:</a>
+              <label for="role">Select Role:</label>
+                <select id="role" onchange="updateUserList()">
+                <th:block th:each="role : ${roles}">
+                    <option th:value="${role.name}" th:text="${role.name}"></option>
+                </th:block>
+                </select>
+                <label for="tempUser">Select User:</label>
+                <select id="tempUser" required>
+                </select>
+                 </div>
+
           </div>
           <div class="additional">
             <div class="attachment">
@@ -64,18 +78,57 @@
 
       </div>
     </form>
-    <script>
-        function setSaveAction() {
-            var form = document.getElementById('userForm');
-                form.action = '/saveUserEdit';
-        }
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    var userLists = {
+        /* Iterujemy po rolach */
+        /*[# th:each="role : ${roles}"]*/
+        '[(${role.name})]': [
+            /* Iterujemy po użytkownikach */
+            /*[# th:each="tempUser : ${users}"]*/
+            /* Sprawdzamy, czy użytkownik ma wybraną rolę */
+            /*[# th:if="${tempUser.userDetails.roleID.name == role.name}"]*/
+            // Tworzymy obiekt zawierający username i idUser
+            { 'username': '[(${tempUser.username})]', 'idUser': '[(${tempUser.idUser})]' },
+            /*[/]*/
+            /*[/]*/
+        ],
+        /*[/]*/
+    };
 
-        function sendToSupervisor()
-        {
-            var form = document.getElementById('userForm');
-            form.action = '/sendToSupervisor';
-        }
-    </script>
+    function updateUserList() {
+        var roleSelect = document.getElementById("role");
+        var userSelect = document.getElementById("tempUser");
+        var selectedRole = roleSelect.value;
+
+        // Clear existing options
+        userSelect.innerHTML = "";
+
+        // Populate user options based on the selected role
+        userLists[selectedRole].forEach(function (tempUser) {
+            var option = document.createElement("option");
+            option.text = tempUser.username;
+            userSelect.add(option);
+        });
+
+        // Update the hidden field with the selected user's ID
+        var selectedUserId = userLists[selectedRole][userSelect.selectedIndex].idUser;
+        document.getElementById("number9").value = selectedUserId;
+    }
+
+    function setSaveAction() {
+        var form = document.getElementById('userForm');
+        form.action = '/saveUserEdit';
+    }
+
+    function sendToSupervisor() {
+        var form = document.getElementById('userForm');
+        form.action = '/sendToSupervisor';
+    }
+
+    updateUserList();
+    /*]]>*/
+</script>
     </body>
 </html>
     </span>
