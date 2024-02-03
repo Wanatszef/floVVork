@@ -135,7 +135,7 @@ public class salesInvoiceController
         Document document = documentRepository.findByDocumentId(documentID);
         if(document != null)
         {
-            document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+            document.setUser(userRepository.findByIdUser(1L));
             document.setTitle("new sales invoice approve");
             document.setDocumentName("salesInvoice/salesInvoiceApproval");
             document.setDocumentValues(documentValues);
@@ -145,7 +145,7 @@ public class salesInvoiceController
         else
         {
             document = new Document();
-            document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+            document.setUser(userRepository.findByIdUser(1L));
             document.setDocumentName("salesInvoice/salesInvoiceApproval");
             document.setActive(1);
             document.setTitle("salesInvoiceApproval");

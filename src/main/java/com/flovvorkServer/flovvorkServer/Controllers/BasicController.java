@@ -27,7 +27,7 @@ public class BasicController
 
     private final TaskCreatorRepository taskCreatorRepository;
 
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
     public BasicController(UserRepository userRepository, DocumentRepository documentRepository, TaskCreatorRepository taskCreatorRepository, MessageRepository messageRepository)
@@ -44,7 +44,7 @@ public class BasicController
     {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
-        //todo zmienic w user repository na findByUser_id
+
         List<Document> historyDocuments = documentRepository.findDocumentByUserAndActiveIsLike(user,0);
 
         List<Document> activeDocuments = documentRepository.findDocumentByUserAndActiveIsLike(user,1);
@@ -59,7 +59,6 @@ public class BasicController
                 model.addAttribute("historyDocuments", historyDocuments);
             }
 
-
             List<User> others = userRepository.findAll();
             List<Message> messageList = new ArrayList<>();
             for(User tempUser : others)
@@ -69,7 +68,6 @@ public class BasicController
                     messageList.add(tempMessage);
                 }
             }
-
 
             if(!messageList.isEmpty())
             {

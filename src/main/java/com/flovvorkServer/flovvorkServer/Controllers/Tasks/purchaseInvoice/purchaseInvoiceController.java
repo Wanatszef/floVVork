@@ -133,7 +133,7 @@ public class purchaseInvoiceController
         Document document = documentRepository.findByDocumentId(documentID);
         if(document != null)
         {
-            document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+            document.setUser(userRepository.findByIdUser(1L));
             document.setTitle("new purchase invoice approve");
             document.setDocumentName("purchaseInvoice/purchaseInvoiceApproval");
             document.setDocumentValues(documentValues);
@@ -143,7 +143,7 @@ public class purchaseInvoiceController
         else
         {
             document = new Document();
-            document.setUser(userRepository.findByUserDetails(userDetailsRepository.findByRoleID(roleRepository.findByRoleID(2))));
+            document.setUser(userRepository.findByIdUser(1L));
             document.setDocumentName("purchaseInvoice/purchaseInvoiceApproval");
             document.setActive(1);
             document.setTitle("purchaseInvoiceApproval");
